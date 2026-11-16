@@ -434,13 +434,15 @@ parámetro mal formado.
 | Multas pendientes y pago | `multa-listar.jsp` | ADMIN |
 | Errores de negocio | `error.jsp` | — |
 
-El diseño está en una única hoja `css/style.css` (≈1400 líneas) con **variables
+El diseño está en una única hoja `css/style.css` (≈1546 líneas) con **variables
 CSS**, *mobile-first* (Grid/Flexbox + *media queries*), modo oscuro por
 `prefers-color-scheme` y **sin colores hardcodeados** dentro de los JSP, lo que
 permite retematizar la aplicación editando un solo archivo. Los fragments
 reutilizables son `cabecera.jspf`, `pie.jspf`, `paginacion.jspf` y
-`buscador-libros.jspf`; la lógica de la búsqueda en vivo vive en
-`js/buscador.js` (sin scriptlets).
+`buscador-libros.jspf`. La lógica de cliente vive en `js/buscador.js`
+(~207 líneas, sin scriptlets): búsqueda en vivo (debounce + `fetch` +
+reemplazo de bloques `data-busqueda`) y control del menú hamburguesa en
+móvil.
 
 ### 5.8 Persistencia y configuración
 
@@ -547,7 +549,7 @@ huérfano y bloquear los posteriores.
 | Media | Reportes: préstamos por período, libros más prestados, multas cobradas/pendientes. |
 | Media | Historial de multas pagadas y recuperación de contraseña. |
 | Baja | `@Schedule` (TimerService) para avisos de vencimiento. |
-| Baja | Exportación a CSV/PDF, Docker Compose, cola de espera, *dark mode*. |
+| Baja | Exportación a CSV/PDF, Docker Compose y cola de espera para libros agotados. |
 
 ---
 

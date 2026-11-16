@@ -166,3 +166,42 @@
         iniciar();
     }
 })();
+
+/* ============================================================
+   Menú hamburguesa (móvil): muestra/oculta .nav-links.
+   Se ejecuta siempre; si no hay botón no hace nada.
+   ============================================================ */
+(function () {
+    'use strict';
+
+    function iniciarMenu() {
+        var botones = document.querySelectorAll('.hamburger');
+        for (var i = 0; i < botones.length; i++) {
+            (function (boton) {
+                var nav = boton.closest('nav');
+                var enlaces = nav ? nav.querySelector('.nav-links') : document.querySelector('.nav-links');
+                if (!enlaces) { return; }
+
+                boton.setAttribute('aria-expanded', 'false');
+
+                boton.addEventListener('click', function () {
+                    var abierto = enlaces.classList.toggle('abierto');
+                    boton.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+                });
+
+                enlaces.addEventListener('click', function (e) {
+                    if (e.target && e.target.tagName === 'A') {
+                        enlaces.classList.remove('abierto');
+                        boton.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            })(botones[i]);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', iniciarMenu);
+    } else {
+        iniciarMenu();
+    }
+})();

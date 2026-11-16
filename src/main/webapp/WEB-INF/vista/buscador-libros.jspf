@@ -52,8 +52,8 @@
     </div>
 </form>
 
-<%-- El contador SIEMPRE se renderiza (aunque oculto): así la
-     búsqueda en vivo puede reemplazarlo en cualquier dirección. --%>
+<%-- El contador SIEMPRE se renderiza (aunque oculto): asi la
+     busqueda en vivo puede reemplazarlo en cualquier direccion. --%>
 <p class="buscador-resultados" data-busqueda="contador" role="status"
    <c:if test="${empty q and empty categoriaSel}">hidden</c:if>>
     <c:choose>

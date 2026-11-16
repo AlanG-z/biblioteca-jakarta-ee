@@ -24,6 +24,9 @@
             <a href="${pageContext.request.contextPath}/catalogo" class="logo">
                 Biblioteca<span>Virtual</span>
             </a>
+                <div>
+                    
+                </div>
 
             <!-- Enlaces cliente (solo si hay sesión) -->
             <c:choose>
@@ -36,9 +39,10 @@
                 </c:when>
                 <c:otherwise>
                     <ul class="nav-links">
+                         <li><a href="${pageContext.request.contextPath}/catalogo">Catálogo</a></li>
                         <li><a href="${pageContext.request.contextPath}/login">Iniciar sesión</a></li>
                         <li><a href="${pageContext.request.contextPath}/registro">Regístrate</a></li>
-                        <li><a href="${pageContext.request.contextPath}/catalogo">Catálogo</a></li>
+                       
                     </ul>
                 </c:otherwise>
             </c:choose>
@@ -60,9 +64,13 @@
                 <c:otherwise>
                     <!-- Botón hamburguesa para móvil -->
                     <button class="hamburger" aria-label="Menú principal">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+           
+                            <ul class="nav-links">
+                         <li><a href="${pageContext.request.contextPath}/catalogo">Catálogo</a></li>
+                        <li><a href="${pageContext.request.contextPath}/login">Iniciar sesión</a></li>
+                        <li><a href="${pageContext.request.contextPath}/registro">Regístrate</a></li>
+                       
+                    </ul>
                     </button>
                 </c:otherwise>
             </c:choose>

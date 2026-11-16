@@ -18,7 +18,7 @@
        href="${pageContext.request.contextPath}/categoria/listar">← Volver</a>
 </div>
 
-<div class="tarjeta" style="max-width:560px;">
+<div class="tarjeta" style="max-width:560px; margin-left:auto; margin-right:auto;">
     <c:if test="${not empty error}">
         <div class="alerta alerta-error" role="alert">
             <c:out value="${error}"/>
