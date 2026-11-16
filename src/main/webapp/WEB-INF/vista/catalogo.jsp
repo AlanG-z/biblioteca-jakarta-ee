@@ -10,8 +10,8 @@
     <!-- Resumen (se actualiza junto con la búsqueda en vivo) -->
     <div class="resumen" data-busqueda="resumen">
         <div class="dato">
-            <span class="numero"><c:out value="${pagina.totalRegistros}"/></span>
-            <span class="etiqueta-dato">Libros en catálogo</span>
+           
+            <span class="etiqueta-dato">Bienvenido a BibliotecaVirtual </span>
         </div>
     </div>
 

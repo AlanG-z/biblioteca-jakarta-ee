@@ -10,7 +10,7 @@
        href="${pageContext.request.contextPath}/prestamo/listar">← Volver</a>
 </div>
 
-<div class="tarjeta" style="max-width:640px;">
+<div class="tarjeta" style="max-width:900px; margin-left:auto; margin-right:auto;">
     <c:if test="${not empty error}">
         <div class="alerta alerta-error" role="alert">
             <c:out value="${error}"/>

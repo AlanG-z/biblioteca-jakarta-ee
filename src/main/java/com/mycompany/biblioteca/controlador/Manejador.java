@@ -48,7 +48,7 @@ import java.util.UUID;
     // Públicas
     "/login", "/logout", "/registro", "/catalogo", "/libro/detalle",
     // Cliente (requieren sesión: las protege AutenticacionFiltro)
-    "/mis-prestamos", "/prestamo/pedir",
+    "/mis-prestamos", "/prestamo/pedir", "/prestamo/pagar-multa",
     // Administrador (las protege AdminFiltro)
     "/categoria/listar", "/categoria/nuevo", "/categoria/editar",
     "/categoria/guardar", "/categoria/eliminar",
@@ -144,6 +144,7 @@ public class Manejador extends HttpServlet {
                 case "/multa/listar":   url = listarMultas(req);         break;
                 case "/multa/guardar":  url = guardarMulta(req, resp);   break;
                 case "/multa/eliminar": url = eliminarMulta(req, resp);  break;
+                case "/prestamo/pagar-multa": url = pagarMultaCliente(req, resp); break;
 
                 // ---------- Libros por categoría (desde el menú) ----------
                 case "/Categoria": url = catalogoCategoria(req, resp);  break;
@@ -778,15 +779,15 @@ public class Manejador extends HttpServlet {
     // ============================================================
 
     private String listarMultas(HttpServletRequest req) {
-        Pagina<Multa> pagina = paginar(req, multaFacade.contarPendientes(),
-                multaFacade::pendientes);
+        Pagina<Multa> pagina = paginar(req, multaFacade.contarTodas(),
+                multaFacade::todas);
         req.setAttribute("multas", pagina.getElementos());
         req.setAttribute("pagina", pagina);
         req.setAttribute("totalCobrar", multaFacade.sumaPendiente());
         return VISTA + "multa-listar.jsp";
     }
 
-    /** POST: marca una multa como pagada. */
+    /** POST (admin): marca una multa como pagada. */
     private String guardarMulta(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         if (!esPost(req)) {
@@ -798,8 +799,8 @@ public class Manejador extends HttpServlet {
             multaFacade.marcarPagada(id);
         } catch (ReglaNegocioException e) {
             req.setAttribute("error", e.getMessage());
-            Pagina<Multa> pagina = paginar(req, multaFacade.contarPendientes(),
-                    multaFacade::pendientes);
+            Pagina<Multa> pagina = paginar(req, multaFacade.contarTodas(),
+                    multaFacade::todas);
             req.setAttribute("multas", pagina.getElementos());
             req.setAttribute("pagina", pagina);
             req.setAttribute("totalCobrar", multaFacade.sumaPendiente());
@@ -807,6 +808,36 @@ public class Manejador extends HttpServlet {
         }
         return redirigirConExito(req, resp, "/multa/listar",
                 "Multa marcada como pagada correctamente.");
+    }
+
+    /** POST (cliente): marca como pagada una multa propia desde "Mis préstamos". */
+    private String pagarMultaCliente(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        if (!esPost(req)) {
+            resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            return null;
+        }
+        Usuario usuario = usuarioEnSesion(req);
+        if (usuario == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return null;
+        }
+        Integer id = parametroEntero(req, "id");
+        try {
+            Multa multa = id == null ? null : multaFacade.find(id);
+            if (multa == null || multa.getPrestamo() == null
+                    || multa.getPrestamo().getUsuario() == null
+                    || !usuario.getId().equals(multa.getPrestamo().getUsuario().getId())) {
+                req.setAttribute("error", "No puede pagar esta multa.");
+                return misPrestamos(req, resp);
+            }
+            multaFacade.marcarPagada(id);
+        } catch (ReglaNegocioException e) {
+            req.setAttribute("error", e.getMessage());
+            return misPrestamos(req, resp);
+        }
+        return redirigirConExito(req, resp, "/mis-prestamos",
+                "Multa pagada correctamente.");
     }
 
     private String eliminarMulta(HttpServletRequest req, HttpServletResponse resp)

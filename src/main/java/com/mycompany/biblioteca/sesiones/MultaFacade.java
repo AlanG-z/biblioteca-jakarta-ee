@@ -54,6 +54,23 @@ public class MultaFacade extends AbstractFacade<Multa> {
                 .getSingleResult();
     }
 
+    /** Página de todas las multas (pagadas e impagas) para el administrador. */
+    public List<Multa> todas(int numero) {
+        prestamoFacade.actualizarAtrasados();
+        return em.createQuery(
+                "SELECT m FROM Multa m ORDER BY m.pagada ASC, m.id DESC", Multa.class)
+                .setFirstResult(Pagina.desplazamiento(numero))
+                .setMaxResults(Configuracion.PAGINA_TAMANO)
+                .getResultList();
+    }
+
+    /** Total de multas registradas (para paginar el listado del administrador). */
+    public long contarTodas() {
+        prestamoFacade.actualizarAtrasados();
+        return em.createQuery("SELECT COUNT(m) FROM Multa m", Long.class)
+                .getSingleResult();
+    }
+
     /** Suma de las multas pendientes (resumen "total a cobrar"). */
     public BigDecimal sumaPendiente() {
         prestamoFacade.actualizarAtrasados();

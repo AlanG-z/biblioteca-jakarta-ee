@@ -113,13 +113,19 @@ summary:focus-visible {
     top: 0;
     z-index: 100;
     border-bottom: 1px solid var(--color-borde);
+    backdrop-filter: blur(8px);
 }
 
 .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    height: 4.5rem;
+    justify-content: space-between;
+    gap: 1rem 1.25rem;
+    min-height: 4.5rem;
+}
+/* Evita que un <div> vacío ocupe espacio en el flex */
+.navbar > div:empty {
+    display: none;
 }
 
 .logo {
@@ -128,76 +134,131 @@ summary:focus-visible {
     font-weight: 700;
     color: var(--color-texto);
     letter-spacing: -0.5px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+.logo:hover {
+    text-decoration: none;
+    color: var(--color-texto);
 }
 
 .logo span {
     color: var(--color-acente-principal);
+    margin-left: 2px;
 }
 
+/* --- Enlaces de navegación --- */
 .nav-links {
     display: flex;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 0.45rem;
     list-style: none;
-    margin: 0;
+    margin: 0 0 0 auto;
     padding: 0;
 }
 
-.nav-links a {
-    font-size: .875rem;
+.nav-links li a {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: 500;
     color: var(--color-texto-suave);
+    padding: 0.45rem 0.8rem;
+    border-radius: 6px;
     position: relative;
-}
-.nav-links a::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--color-acente-principal);
-    transition: var(--transicion-rápida);
-}
-.nav-links a:hover::after {
-    width: 100%;
-}
-.nav-links a[aria-current="page"] {
-    color: var(--color-acente-principal);
-    font-weight: 600;
-}
-.nav-links a[aria-current="page"]::after {
-    width: 100%;
+    text-decoration: none;
+    transition: color var(--transicion-rápida), background-color var(--transicion-rápida);
 }
 
-/* Dropdown Administración – integrado al estilo del menú */
+.nav-links li a:hover {
+    color: var(--color-texto);
+    background-color: var(--color-fondo-suave);
+    text-decoration: none;
+}
+
+.nav-links li a[aria-current="page"] {
+    color: var(--color-acente-principal);
+    font-weight: 600;
+    background-color: rgba(45, 90, 39, 0.08);
+}
+
+/* Badge / píldora para el nombre del usuario (el <li> sin <a>) */
+.nav-links li:not(:has(a)) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-acente-principal);
+    background-color: rgba(45, 90, 39, 0.1);
+    border: 1px solid rgba(45, 90, 39, 0.25);
+    padding: 0.32rem 0.8rem;
+    border-radius: 999px;
+    margin: 0 0.25rem;
+    user-select: none;
+}
+
+.nav-links li:not(:has(a))::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--color-acente-principal);
+}
+
+/* Botón destacado para "Regístrate" (visitante) */
+.nav-links li a[href$="/registro"] {
+    background-color: var(--color-acente-principal);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.nav-links li a[href$="/registro"]:hover {
+    background-color: var(--color-acente-principal-oscuro);
+    color: #ffffff;
+}
+
+/* Hover sutil de alerta para "Cerrar sesión" */
+.nav-links li a[href$="/logout"]:hover {
+    color: var(--color-peligro);
+    background-color: rgba(197, 48, 48, 0.08);
+}
+
+/* --- Dropdown Administración --- */
 .dropdown {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
 }
 
 .dropdown-trigger {
-    font-size: .875rem;
+    font-size: 0.9rem;
+    font-weight: 500;
     color: var(--color-texto-suave);
     cursor: pointer;
-    padding: .4rem .6rem;
+    padding: 0.45rem 0.8rem;
     border-radius: 6px;
     display: inline-flex;
     align-items: center;
-    gap: .35rem;
-    transition: var(--transicion-rápida);
+    gap: 0.4rem;
+    transition: color var(--transicion-rápida), background-color var(--transicion-rápida);
     user-select: none;
 }
+
 .dropdown-trigger::after {
-    display: inline;
     content: "\25BE";
-    font-size: .6rem;
+    font-size: 0.7rem;
     color: var(--color-texto-suave);
     transition: transform var(--transicion-rápida);
 }
+
 .dropdown:hover .dropdown-trigger,
 .dropdown:focus-within .dropdown-trigger {
     background-color: var(--color-fondo-suave);
     color: var(--color-texto);
 }
+
 .dropdown:hover .dropdown-trigger::after,
 .dropdown:focus-within .dropdown-trigger::after {
     transform: rotate(180deg);
@@ -205,31 +266,31 @@ summary:focus-visible {
 
 .dropdown-content {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 6px);
     right: 0;
     background-color: var(--color-superficie);
-    min-width: 140px;
+    min-width: 185px;
     box-shadow: var(--sombra-media);
     border-radius: var(--radio);
-    padding: .5rem 0;
-    margin-top: .5rem;
+    padding: 0.4rem;
     z-index: 100;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
+    transform: translateY(6px);
     transition: var(--transicion-suave);
     border: 1px solid var(--color-borde);
 }
-.dropdown-content a {
-    display: block;
-    padding: .5rem 1rem;
-    font-size: .875rem;
-    color: var(--color-texto);
+
+/* Puente invisible para evitar que se cierre al bajar el cursor */
+.dropdown-content::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
 }
-.dropdown-content a:hover {
-    background-color: var(--color-fondo-suave);
-    color: var(--color-acente-principal);
-}
+
 .dropdown:hover .dropdown-content,
 .dropdown:focus-within .dropdown-content {
     opacity: 1;
@@ -237,21 +298,41 @@ summary:focus-visible {
     transform: translateY(0);
 }
 
-/* Hamburger (mobile) */
+.dropdown-content a {
+    display: block;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.875rem;
+    color: var(--color-texto);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color var(--transicion-rápida), color var(--transicion-rápida), padding-left var(--transicion-rápida);
+}
+
+.dropdown-content a:hover {
+    background-color: var(--color-fondo-suave);
+    color: var(--color-acente-principal);
+    padding-left: 1.05rem;
+    text-decoration: none;
+}
+
+/* --- Hamburger (mobile) --- */
 .hamburger {
     display: none;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
     background: none;
-    border: none;
+    border: 1px solid var(--color-borde);
+    border-radius: 6px;
     cursor: pointer;
-    padding: .35rem;
+    padding: 0.45rem;
 }
+
 .hamburger span {
-    width: 25px;
-    height: 3px;
+    width: 22px;
+    height: 2px;
     background-color: var(--color-texto);
+    border-radius: 2px;
     transition: var(--transicion-rápida);
 }
 
@@ -447,7 +528,7 @@ a.btn.btn-exito,     a.btn.btn-exito:hover { color: #ffffff; }
 
 /* Tarjeta de libro */
 .card-libro {
-    background: var(--color-superficie);
+  
     border-radius: var(--radio);
     overflow: hidden;
     height: 100%;
@@ -587,7 +668,7 @@ a.btn.btn-exito,     a.btn.btn-exito:hover { color: #ffffff; }
     background-color: var(--color-fondo-suave);
     padding: .75rem .5rem;
     text-align: left;
-    border-bottom: 2px solid var(--color-borde);
+  //  border-bottom: 2px solid var(--color-borde);
     font-weight: 600;
     color: var(--color-texto-suave);
     font-size: .75rem;
@@ -596,7 +677,7 @@ a.btn.btn-exito,     a.btn.btn-exito:hover { color: #ffffff; }
 }
 .tabla tbody td {
     padding: .5rem .5rem;
-    border-bottom: 1px solid var(--color-borde);
+//    border-bottom: 1px solid var(--color-borde);
     transition: var(--transicion-rápida);
 }
 .tabla tbody tr {
@@ -768,7 +849,7 @@ a.btn.btn-exito,     a.btn.btn-exito:hover { color: #ffffff; }
         gap: 0;
         padding: .5rem 0 .25rem;
         border-top: 1px solid var(--color-borde);
-        margin-top: .5rem;
+        margin: .5rem 0 0 0;
     }
     .nav-links.abierto {
         display: flex;

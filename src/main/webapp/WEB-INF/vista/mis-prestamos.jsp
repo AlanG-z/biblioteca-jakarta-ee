@@ -16,6 +16,11 @@
             <c:out value="${exito}"/>
         </div>
     </c:if>
+    <c:if test="${not empty error}">
+        <div class="alerta alerta-error" role="alert">
+            <c:out value="${error}"/>
+        </div>
+    </c:if>
 
     <!-- Resumen rápido -->
     <div class="tarjetas-estadisticas">
@@ -81,7 +86,7 @@
         </c:choose>
     </div>
 
-    <!-- Listado de multas (expresiones EL directas, sin c:choose anidado) -->
+    <!-- Listado de multas -->
     <div class="seccion" style="margin-top: 2rem;">
         <h2 style="margin-top: 1.5rem;">Multas</h2>
         <!-- Paginación -->
@@ -104,6 +109,7 @@
                                 <th class="num">Monto</th>
                                 <th>Estado</th>
                                 <th>Fecha de pago</th>
+                                <!-- <th>Acción</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -115,20 +121,47 @@
                                         $<fmt:formatNumber value="${m.monto}" minFractionDigits="2" maxFractionDigits="2"/>
                                     </td>
                                     <td>
-                                        <!-- Estado usando expresión EL directa: ${m.pagada ? 'Pagada' : 'Impaga'} -->
-                                        <c:out value="${m.pagada ? 'Pagada' : 'Impaga'}"/>
+                                        <c:choose>
+                                            <c:when test="${m.pagada}">
+                                                <span class="etiqueta etiqueta-pagada">Pagada</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="etiqueta etiqueta-impa">Impaga</span>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
                                     <td>
-                                      <!-- Fecha usando expresión EL directa -->
-                                      <c:out value="${not empty m.fechaPago ? m.fechaPago : '—'}"/>
+                                        <c:choose>
+                                            <c:when test="${not empty m.fechaPago}">
+                                                <c:out value="${m.fechaPago}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="muted">—</span>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </td>
+                                    <!-- <td>
+                                        <c:choose>
+                                            <c:when test="${m.pagada}">
+                                                <span class="muted">—</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <form method="post"
+                                                      action="${pageContext.request.contextPath}/prestamo/pagar-multa"
+                                                      style="display:inline;">
+                                                    <input type="hidden" name="id" value="${m.id}">
+                                                    <button class="btn btn-exito btn-chico" type="submit">Pagar</button>
+                                                </form>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td> -->
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </div>
                 <p class="muted chico">
-                    Las multas impagas deben pagarse en la biblioteca antes de pedir un nuevo libro.
+                    Las multas impagas deben pagarse antes de pedir un nuevo libro. Al pagar, la multa queda registrada como pagada para usted y para el administrador.
                 </p>
             </c:otherwise>
         </c:choose>

@@ -13,17 +13,6 @@
         </div>
     </c:if>
 
-    <!-- Resumen (se actualiza con la búsqueda en vivo) -->
-    <div class="resumen" data-busqueda="resumen">
-        <div class="dato">
-            <span class="numero"><c:out value="${pagina.totalRegistros}"/></span>
-            <span class="etiqueta-dato">Libros en catálogo</span>
-        </div>
-        <div class="dato">
-            <span class="numero"><c:out value="${ejemplaresDisponibles}"/></span>
-            <span class="etiqueta-dato">Total de emplares disponibles</span>
-        </div>
-    </div>
 
     <!-- Listado -->
     <section class="seccion" style="margin-top: 1rem;">
@@ -66,7 +55,9 @@
                                 <th>ID</th>
                                 <th>Título</th>
                                 <th>Autor</th>
-                                <th>Categoría</th>
+                                <th>Categoria</th>
+                                <th>Ejemplares Disponibles</th>
+                                <th>Totalde Ejemplares</th>
                                 <th class="acciones">Acciones</th>
                             </tr>
                         </thead>
@@ -80,9 +71,16 @@
                                         </a>
                                     </td>
                                     <td><c:out value="${l.autor}"/></td>
-                                    <td>
+                                     <td>
                                         <c:out value="${l.categoria.nombre}"/>
                                     </td>
+                                    <td>
+                                        <c:out value="${l.ejemplaresDisponibles}"/>
+                                    </td>
+                                     <td>
+                                        <c:out value="${l.ejemplaresTotal}"/>
+                                    </td>
+                                    
                                     <td class="acciones">
                                         <a class="btn btn-secundario btn-chico" href="${pageContext.request.contextPath}/libro/editar?id=${l.id}">Editar</a>
                                         <form class="acciones" method="post" style="display:inline"

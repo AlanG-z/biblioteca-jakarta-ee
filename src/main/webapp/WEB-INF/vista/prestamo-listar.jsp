@@ -13,17 +13,6 @@
         </div>
     </c:if>
 
-    <!-- Resumen (se actualiza con la búsqueda en vivo) -->
-    <div class="resumen" data-busqueda="resumen">
-        <div class="dato">
-            <span class="numero"><c:out value="${pagina.totalRegistros}"/></span>
-            <span class="etiqueta-dato">Préstamos registrados</span>
-        </div>
-        <div class="dato">
-            <span class="numero"><c:out value="${atrasados}"/></span>
-            <span class="etiqueta-dato">Atrasados</span>
-        </div>
-    </div>
 
     <!-- Listado -->
     <section class="seccion" style="margin-top: 1rem;">
@@ -69,8 +58,7 @@
         <!-- Resultados: bloque que reemplaza la búsqueda en vivo -->
         <div data-busqueda="resultados">
         <!-- Paginación -->
-        <c:set var="pagina" value="${pagina}"/>
-        <%@ include file="/WEB-INF/vista/paginacion.jspf" %>
+    
 
         <c:choose>
             <c:when test="${empty prestamos}">
@@ -127,20 +115,31 @@
                                         </c:choose>
                                     </td>
                                     <td class="acciones">
+                                        <c:choose>
+                                            <c:when test="${p.estado=='ACTIVO'|| p.estado=='ATRASADO'}">
+                                                
+                                  
                                         <a class="btn btn-secundario btn-chico" href="${pageContext.request.contextPath}/prestamo/editar?id=${p.id}">Editar</a>
                                         <form class="acciones" method="post" style="display:inline"
                                               action="${pageContext.request.contextPath}/prestamo/devolver">
                                             <input type="hidden" name="id" value="${p.id}">
                                             <button class="btn btn-peligro btn-chico" type="submit">Devolver</button>
                                         </form>
+                                                </c:when>
+                                        <c:otherwise><button class="btn btn-secundario btn-chico"> - </button></c:otherwise>
+                                        </c:choose>
                                     </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </div>
+                
             </c:otherwise>
+            
         </c:choose>
+            <c:set var="pagina" value="${pagina}"/>
+        <%@ include file="/WEB-INF/vista/paginacion.jspf" %>
         </div>
     </section>
 </div>
