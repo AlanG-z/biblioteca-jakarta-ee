@@ -1,0 +1,16 @@
+<%-- ============================================================
+     Fragmento de pie: cierra el main, muestra el pie de
+     página y cierra el HTML. Se incluye al final de cada vista.
+     ============================================================ --%>
+</main>
+
+<footer class="pie">
+    Sistema de Biblioteca &middot; Pr&eacute;stamos de libros
+</footer>
+
+<%-- Búsqueda en vivo: sólo actúa en las páginas que tienen
+     un formulario .buscador; en el resto no hace nada. --%>
+<script src="${pageContext.request.contextPath}/js/buscador.js" defer></script>
+
+</body>
+</html>

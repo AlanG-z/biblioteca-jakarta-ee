@@ -1,0 +1,89 @@
+<%-- ============================================================
+     Controles de paginación de los listados.
+     Se incluye justo antes de pie.jspf en cada vista con tablas.
+
+     Atributos (los deja el servlet en cada listado):
+       pagina            -> objeto Pagina<T> con:
+       pagina.rutaPagina     ruta base de los enlaces (sin la query)
+       pagina.parametros     parámetros extra a conservar (búsqueda, filtro)
+       pagina.actual         página que se está viendo
+       pagina.paginaDesde    primera página que se muestra en los botones
+       pagina.paginaHasta    última página que se muestra en los botones
+       pagina.totalPaginas   cantidad total de páginas
+       pagina.totalRegistros cantidad total de registros
+       pagina.itemDesde      primer registro visible de esta página
+       pagina.itemHasta      último registro visible de esta página
+
+     En "Mis préstamos" hay dos listas: antes de incluir este
+     fragmento se hace <c:set var="pagina" value="${...}"/>.
+     ============================================================ --%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<c:if test="${not empty pagina and pagina.totalPaginas > 1}">
+    <nav class="paginacion" aria-label="Paginaci&oacute;n del listado">
+
+        <p class="paginacion-info">
+            Mostrando <c:out value="${pagina.itemDesde}"/>&ndash;<c:out value="${pagina.itemHasta}"/>
+            de <c:out value="${pagina.totalRegistros}"/> &middot;
+            P&aacute;gina <c:out value="${pagina.actual}"/> de <c:out value="${pagina.totalPaginas}"/>
+        </p>
+
+        <div class="paginacion-botones">
+            <%-- Anterior --%>
+            <c:choose>
+                <c:when test="${pagina.actual gt 1}">
+                    <a class="btn btn-chico btn-secundario" rel="prev"
+                       aria-label="P&aacute;gina anterior"
+                       href="${pagina.rutaPagina}?pagina=${pagina.actual - 1}${pagina.parametros}">&lsaquo; Anterior</a>
+                </c:when>
+                <c:otherwise>
+                    <span class="paginacion-tope" aria-hidden="true">&lsaquo; Anterior</span>
+                </c:otherwise>
+            </c:choose>
+
+            <%-- Primera página y puntos suspensivos --%>
+            <c:if test="${pagina.paginaDesde gt 1}">
+                <a class="btn btn-chico btn-secundario" aria-label="P&aacute;gina 1"
+                   href="${pagina.rutaPagina}?pagina=1${pagina.parametros}">1</a>
+                <c:if test="${pagina.paginaDesde gt 2}">
+                    <span class="paginacion-tope">&hellip;</span>
+                </c:if>
+            </c:if>
+
+            <%-- Ventana de páginas --%>
+            <c:forEach begin="${pagina.paginaDesde}" end="${pagina.paginaHasta}" var="n">
+                <c:choose>
+                    <c:when test="${n eq pagina.actual}">
+                        <span class="paginacion-actual" aria-current="page"><c:out value="${n}"/></span>
+                    </c:when>
+                    <c:otherwise>
+                        <a class="btn btn-chico btn-secundario" aria-label="P&aacute;gina ${n}"
+                           href="${pagina.rutaPagina}?pagina=${n}${pagina.parametros}"><c:out value="${n}"/></a>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+
+            <%-- Última página y puntos suspensivos --%>
+            <c:if test="${pagina.paginaHasta lt pagina.totalPaginas}">
+                <c:if test="${pagina.paginaHasta lt pagina.totalPaginas - 1}">
+                    <span class="paginacion-tope">&hellip;</span>
+                </c:if>
+                <a class="btn btn-chico btn-secundario"
+                   aria-label="&Uacute;ltima p&aacute;gina"
+                   href="${pagina.rutaPagina}?pagina=${pagina.totalPaginas}${pagina.parametros}"><c:out value="${pagina.totalPaginas}"/></a>
+            </c:if>
+
+            <%-- Siguiente --%>
+            <c:choose>
+                <c:when test="${pagina.actual lt pagina.totalPaginas}">
+                    <a class="btn btn-chico btn-secundario" rel="next"
+                       aria-label="P&aacute;gina siguiente"
+                       href="${pagina.rutaPagina}?pagina=${pagina.actual + 1}${pagina.parametros}">Siguiente &rsaquo;</a>
+                </c:when>
+                <c:otherwise>
+                    <span class="paginacion-tope" aria-hidden="true">Siguiente &rsaquo;</span>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </nav>
+</c:if>

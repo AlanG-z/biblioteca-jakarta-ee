@@ -1,0 +1,36 @@
+# ============================================================
+# Build de Maven
+# ============================================================
+target/
+
+# ============================================================
+# Imágenes subidas desde el formulario de libro
+# (viven en el WAR desplegado y se pierden al redeploy; se
+#  conserva solo .gitkeep para que Maven incluya la carpeta)
+# ============================================================
+src/main/webapp/img/portadas/*
+!src/main/webapp/img/portadas/.gitkeep
+
+# ============================================================
+# IDEs
+# ============================================================
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+nbproject/
+nbactions-*.xml
+build/
+
+# ============================================================
+# Sistema y archivos temporales
+# ============================================================
+*.class
+*.log
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db

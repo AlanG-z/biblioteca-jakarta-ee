@@ -1,0 +1,3 @@
+Carpeta destino de las portadas subidas desde el formulario de libro.
+Este archivo existe para que Maven incluya el directorio en el WAR
+(un directorio vacío no se empaqueta).

@@ -1,0 +1,636 @@
+/* ============================================================
+   Sistema de Biblioteca - hoja de estilos única
+   Mobile-first: primero el diseño para móvil y con media
+   queries se agregan las pantallas medianas y grandes.
+   Todos los colores viven en variables CSS (no se usan
+   colores hardcodeados en los JSP).
+   ============================================================ */
+
+:root {
+    /* Colores */
+    --color-primario: #1d4ed8;
+    --color-primario-oscuro: #1e40af;
+    --color-fondo: #f1f5f9;
+    --color-superficie: #ffffff;
+    --color-texto: #0f172a;
+    --color-texto-suave: #64748b;
+    --color-borde: #e2e8f0;
+    --color-exito: #16a34a;
+    --color-exito-oscuro: #15803d;
+    --color-peligro: #dc2626;
+    --color-peligro-oscuro: #b91c1c;
+    --color-aviso: #d97706;
+    --color-cabecera: #0f172a;
+
+    /* Tipografía y espaciado */
+    --fuente: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --tamanio-base: 15px;
+    --espacio: 1rem;
+    --espacio-grande: 1.5rem;
+    --radio: 10px;
+    --sombra: 0 1px 3px rgba(15, 23, 42, .08), 0 4px 14px rgba(15, 23, 42, .06);
+    --ancho-maximo: 1100px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    margin: 0;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: var(--fuente);
+    font-size: var(--tamanio-base);
+    line-height: 1.5;
+}
+
+a { color: var(--color-primario); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1, h2, h3 { line-height: 1.25; margin: 0 0 var(--espacio); }
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.2rem; }
+h3 { font-size: 1.05rem; }
+
+/* ============================================================
+   Contenedor general de las páginas
+   ============================================================ */
+.contenedor {
+    max-width: var(--ancho-maximo);
+    margin: 0 auto;
+    padding: var(--espacio);
+}
+
+/* Cabecera de página: título + botón de acción */
+.pagina-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espacio);
+    margin-bottom: var(--espacio-grande);
+}
+
+.muted { color: var(--color-texto-suave); }
+.chico { font-size: .85rem; }
+
+/* ============================================================
+   Menú de navegación (mobile-first)
+   ============================================================ */
+.cabecera {
+    background: var(--color-cabecera);
+    color: #fff;
+    box-shadow: var(--sombra);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.menu {
+    max-width: var(--ancho-maximo);
+    margin: 0 auto;
+    padding: .6rem var(--espacio);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1.25rem;
+}
+
+.marca {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: .3px;
+}
+.marca:hover { text-decoration: none; opacity: .9; }
+
+/* Interruptor del menú móvil (sin JavaScript) */
+.menu-check { display: none; }
+
+.menu-icono {
+    margin-left: auto;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: .45rem .55rem;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 8px;
+}
+.menu-icono span {
+    width: 20px;
+    height: 2px;
+    background: #fff;
+    display: block;
+}
+
+.menu-lista {
+    display: none;
+    width: 100%;
+    list-style: none;
+    margin: .5rem 0 0;
+    padding: 0;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.menu-check:checked ~ .menu-lista { display: flex; }
+
+.menu-lista > li > a,
+.menu-lista summary {
+    display: block;
+    color: rgba(255, 255, 255, .9);
+    padding: .55rem .7rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: .95rem;
+}
+.menu-lista > li > a:hover,
+.menu-lista summary:hover {
+    background: rgba(255, 255, 255, .12);
+    text-decoration: none;
+}
+
+.menu-usuario {
+    color: rgba(255, 255, 255, .65);
+    font-size: .85rem;
+    padding: .3rem .7rem;
+}
+
+/* Desplegables (categorías y administración) */
+.desplegable { position: relative; }
+.desplegable summary { list-style: none; }
+.desplegable summary::-webkit-details-marker { display: none; }
+.desplegable summary::after { content: " ▾"; font-size: .75em; }
+
+.desplegable ul {
+    list-style: none;
+    margin: .2rem 0 0;
+    padding: .3rem;
+    background: var(--color-superficie);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    min-width: 210px;
+}
+.desplegable ul a {
+    display: block;
+    color: var(--color-texto);
+    padding: .45rem .6rem;
+    border-radius: 6px;
+    font-size: .92rem;
+}
+.desplegable ul a:hover { background: var(--color-fondo); text-decoration: none; }
+.desplegable ul .separador {
+    border-top: 1px solid var(--color-borde);
+    margin: .3rem 0;
+}
+
+/* ============================================================
+   Botones
+   ============================================================ */
+.btn {
+    display: inline-block;
+    padding: .55rem 1.1rem;
+    border: 0;
+    border-radius: 8px;
+    background: var(--color-primario);
+    color: #fff;
+    font-family: inherit;
+    font-size: .92rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .15s, transform .15s;
+}
+.btn:hover { background: var(--color-primario-oscuro); text-decoration: none; transform: translateY(-1px); }
+
+.btn-exito { background: var(--color-exito); }
+.btn-exito:hover { background: var(--color-exito-oscuro); }
+
+.btn-peligro { background: var(--color-peligro); }
+.btn-peligro:hover { background: var(--color-peligro-oscuro); }
+
+.btn-secundario {
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+}
+.btn-secundario:hover { background: var(--color-fondo); }
+
+.btn-chico { padding: .35rem .7rem; font-size: .83rem; }
+
+/* Acciones en línea dentro de las tablas */
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+/* ============================================================
+   Alertas (errores y mensajes de éxito)
+   ============================================================ */
+.alerta {
+    padding: .7rem 1rem;
+    border-radius: var(--radio);
+    margin-bottom: var(--espacio);
+    border: 1px solid transparent;
+    font-size: .93rem;
+}
+.alerta-error {
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: var(--color-peligro-oscuro);
+}
+.alerta-exito {
+    background: #dcfce7;
+    border-color: #bbf7d0;
+    color: var(--color-exito-oscuro);
+}
+
+/* ============================================================
+   Tarjetas
+   ============================================================ */
+.tarjeta {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: var(--espacio-grande);
+    margin-bottom: var(--espacio);
+}
+
+/* Rejilla de tarjetas (catálogo y resúmenes) */
+.rejilla {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--espacio);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tarjeta-libro { display: flex; flex-direction: column; gap: .4rem; }
+.tarjeta-libro .titulo { font-weight: 700; font-size: 1.02rem; color: var(--color-texto); }
+.tarjeta-libro .autor { color: var(--color-texto-suave); font-size: .9rem; }
+.tarjeta-libro .pie-tarjeta {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding-top: .6rem;
+}
+
+/* Resumen de números (listados) */
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--espacio);
+    margin-bottom: var(--espacio-grande);
+}
+.resumen .dato {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: var(--espacio);
+    box-shadow: var(--sombra);
+}
+.resumen .numero { display: block; font-size: 1.5rem; font-weight: 700; }
+.resumen .etiqueta-dato { color: var(--color-texto-suave); font-size: .85rem; }
+
+/* ============================================================
+   Etiquetas de estado (badges)
+   ============================================================ */
+.etiqueta {
+    display: inline-block;
+    padding: .18rem .55rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    background: var(--color-borde);
+    color: var(--color-texto-suave);
+    white-space: nowrap;
+}
+.etiqueta-activo, .etiqueta-pagada { background: #dcfce7; color: var(--color-exito-oscuro); }
+.etiqueta-atrasado, .etiqueta-impaga { background: #fee2e2; color: var(--color-peligro-oscuro); }
+.etiqueta-devuelto { background: #e2e8f0; color: var(--color-texto-suave); }
+.etiqueta-admin { background: #dbeafe; color: var(--color-primario-oscuro); }
+
+/* ============================================================
+   Tablas (con desplazamiento horizontal en móvil)
+   ============================================================ */
+.tabla-contenedor {
+    overflow-x: auto;
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+}
+.tabla th, .tabla td {
+    padding: .7rem .85rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-borde);
+    font-size: .92rem;
+    vertical-align: middle;
+}
+.tabla thead th {
+    background: var(--color-fondo);
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--color-texto-suave);
+    position: sticky;
+    top: 0;
+}
+.tabla tbody tr:last-child td { border-bottom: 0; }
+.tabla tbody tr:hover { background: #f8fafc; }
+.tabla .num { text-align: right; white-space: nowrap; }
+/* Columna del título: que no se comprima demasiado */
+.tabla .celda-titulo { min-width: 150px; }
+
+/* Estado vacío de los listados */
+.vacio {
+    text-align: center;
+    color: var(--color-texto-suave);
+    padding: 2.5rem 1rem;
+    background: var(--color-superficie);
+    border: 1px dashed var(--color-borde);
+    border-radius: var(--radio);
+}
+
+/* ============================================================
+   Formularios
+   ============================================================ */
+.formulario { display: grid; gap: var(--espacio); }
+
+.campo { display: grid; gap: .3rem; }
+.campo label { font-size: .88rem; font-weight: 600; }
+
+.campo input[type="text"],
+.campo input[type="email"],
+.campo input[type="password"],
+.campo input[type="number"],
+.campo input[type="date"],
+.campo select,
+.campo textarea {
+    width: 100%;
+    padding: .55rem .7rem;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    font-family: inherit;
+    font-size: .95rem;
+}
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    outline: 2px solid var(--color-primario);
+    outline-offset: 1px;
+    border-color: var(--color-primario);
+}
+
+.campo .ayuda { font-size: .8rem; color: var(--color-texto-suave); }
+
+.campo-check {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .92rem;
+}
+.campo-check input { width: 1.05rem; height: 1.05rem; }
+
+/* Barra de búsqueda y filtros del catálogo */
+.barra-busqueda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio);
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: var(--espacio);
+    box-shadow: var(--sombra);
+    margin-bottom: var(--espacio-grande);
+}
+.barra-busqueda .campo { flex: 1 1 220px; }
+.barra-busqueda .btn { align-self: end; }
+
+/* ============================================================
+   Vistas de login / registro
+   ============================================================ */
+.acceso {
+    max-width: 420px;
+    margin: 2rem auto;
+    padding: 0 var(--espacio);
+}
+.acceso .tarjeta { padding: var(--espacio-grande); }
+.acceso .pie-acceso {
+    text-align: center;
+    margin-top: var(--espacio);
+    font-size: .9rem;
+    color: var(--color-texto-suave);
+}
+
+/* ============================================================
+   Detalle de libro
+   ============================================================ */
+.detalle {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--espacio-grande);
+}
+.datos-libro dt {
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--color-texto-suave);
+    margin-top: .8rem;
+}
+.datos-libro dd { margin: .15rem 0 0; font-size: 1rem; }
+
+/* ============================================================
+   Pie de página
+   ============================================================ */
+.pie {
+    text-align: center;
+    color: var(--color-texto-suave);
+    font-size: .85rem;
+    padding: var(--espacio-grande) var(--espacio);
+    margin-top: var(--espacio-grande);
+}
+
+/* ============================================================
+   Media queries: pantallas medianas y grandes
+   ============================================================ */
+
+/* Tablet en adelante */
+@media (min-width: 640px) {
+    :root { --tamanio-base: 15.5px; }
+
+    .rejilla { grid-template-columns: repeat(2, 1fr); }
+
+    .detalle { grid-template-columns: 2fr 1fr; }
+
+    .formulario.dos-columnas { grid-template-columns: 1fr 1fr; }
+    .formulario.dos-columnas .campo-ancho { grid-column: 1 / -1; }
+}
+
+/* Escritorio: menú en fila y rejilla de 3 columnas */
+@media (min-width: 900px) {
+    .rejilla { grid-template-columns: repeat(3, 1fr); }
+
+    .menu-icono { display: none; }
+    .menu-check { display: none; }
+
+    .menu-lista {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: auto;
+        margin: 0 0 0 auto;
+        gap: .35rem;
+    }
+    .menu-check:checked ~ .menu-lista { display: flex; }
+
+    .menu-usuario { order: -1; }
+
+    /* Desplegables abiertos al pasar el mouse */
+    .desplegable > ul {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: .35rem;
+        display: none;
+    }
+    .desplegable:hover > ul,
+    .desplegable:focus-within > ul { display: block; }
+    .desplegable[open] > ul { display: block; }
+
+    .rejilla-libros { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Pantallas grandes */
+@media (min-width: 1200px) {
+    .rejilla { grid-template-columns: repeat(4, 1fr); }
+}
+/* ============================================================
+   Portadas de libros
+   ============================================================ */
+.portada {
+    background: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    aspect-ratio: 2 / 3;          /* proporción de libro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: .6rem;
+}
+.portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;            /* rellena sin deformar */
+    display: block;
+}
+.portada-sin-imagen {
+    color: var(--color-texto-suave);
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+.portada-grande { max-width: 220px; margin: 0 auto 1rem; }
+.portada-preview { max-width: 110px; border-radius: 6px; margin-top: .5rem; }
+
+/* Miniatura de portada dentro de las tablas del listado */
+.portada-mini {
+    display: block;
+    width: 34px;
+    height: 46px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--color-borde);
+    background: var(--color-fondo);
+}
+/* Celda de la columna Portada: ancho fijo para no descuadrar la fila */
+.tabla .celda-portada {
+    width: 52px;
+    padding-top: .45rem;
+    padding-bottom: .45rem;
+}
+/* Recuadro de reemplazo cuando no hay portada o la imagen no carga */
+.portada-mini-vacia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 46px;
+    border: 1px dashed var(--color-borde);
+    border-radius: 4px;
+    background: var(--color-fondo);
+    color: var(--color-texto-suave);
+    font-size: .85rem;
+}
+/* ============================================================
+   Paginación de los listados (fragmento paginacion.jspf)
+   ============================================================ */
+.paginacion {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    align-items: center;
+    margin-top: var(--espacio);
+}
+
+.paginacion-info {
+    margin: 0;
+    color: var(--color-texto-suave);
+    font-size: .85rem;
+    text-align: center;
+}
+
+.paginacion-botones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .35rem;
+}
+
+/* Página que se está viendo */
+.paginacion-actual {
+    display: inline-block;
+    padding: .35rem .7rem;
+    border-radius: 8px;
+    background: var(--color-primario);
+    color: var(--color-superficie);
+    font-size: .83rem;
+    font-weight: 700;
+}
+
+/* Anterior/Siguiente no disponibles y puntos suspensivos */
+.paginacion-tope {
+    display: inline-block;
+    padding: .35rem .7rem;
+    color: var(--color-texto-suave);
+    font-size: .83rem;
+    cursor: default;
+}
+
+/* Pantallas medianas: info a la izquierda y botones a la derecha */
+@media (min-width: 640px) {
+    .paginacion {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .paginacion-info { text-align: left; }
+}

@@ -1,0 +1,68 @@
+<%-- ============================================================
+     Buscador reutilizable de libros: texto libre (título o autor)
+     más filtro por categoría.
+
+     Se usa en el catálogo público y en el listado de libros del
+     administrador. Antes de incluirlo la vista puede definir:
+
+       accionBuscador  action del formulario (por defecto /catalogo)
+       q               texto ya buscado (lo deja el servlet)
+       categoriaSel    id de la categoría elegida (lo deja el servlet)
+       categorias      lista de categorías para el combo
+       pagina          objeto Pagina, para informar los resultados
+
+     Los parámetros q y categoria son los mismos que ya lee el
+     servlet (Manejador.catalogo / Manejador.listarLibros).
+     ============================================================ --%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<c:if test="${empty accionBuscador}">
+    <c:set var="accionBuscador"
+           value="${pageContext.request.contextPath}/catalogo"/>
+</c:if>
+
+<form class="buscador" method="get" action="${accionBuscador}"
+      role="search" aria-label="Buscar libros">
+    <div class="campo campo-busqueda">
+        <label for="q">T&iacute;tulo o autor</label>
+        <input type="search" id="q" name="q" class="input"
+               maxlength="150"
+               value="<c:out value='${q}'/>"
+               placeholder="Ej.: Garc&iacute;a M&aacute;rquez">
+    </div>
+
+    <div class="campo campo-busqueda">
+        <label for="categoria">Categor&iacute;a</label>
+        <select id="categoria" name="categoria">
+            <option value="">Todas las categor&iacute;as</option>
+            <c:forEach var="cat" items="${categorias}">
+                <option value="${cat.id}"
+                        <c:if test="${categoriaSel == cat.id}">selected</c:if>>
+                    <c:out value="${cat.nombre}"/>
+                </option>
+            </c:forEach>
+        </select>
+    </div>
+
+    <div class="buscador-acciones">
+        <button class="btn btn-primario" type="submit">Buscar</button>
+        <c:if test="${not empty q or not empty categoriaSel}">
+            <a class="btn btn-secundario" href="${accionBuscador}">Limpiar</a>
+        </c:if>
+    </div>
+</form>
+
+<%-- El contador SIEMPRE se renderiza (aunque oculto): así la
+     búsqueda en vivo puede reemplazarlo en cualquier dirección. --%>
+<p class="buscador-resultados" data-busqueda="contador" role="status"
+   <c:if test="${empty q and empty categoriaSel}">hidden</c:if>>
+    <c:choose>
+        <c:when test="${pagina.totalRegistros == 1}">1 libro encontrado</c:when>
+        <c:otherwise>
+            <c:out value="${pagina.totalRegistros}"/> libros encontrados
+        </c:otherwise>
+    </c:choose>
+    <c:if test="${not empty q}">
+        &middot; texto: &laquo;<c:out value="${q}"/>&raquo;
+    </c:if>
+</p>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+
+    <!-- Unidad de persistencia JTA (transacciones gestionadas por el contenedor).
+         El DataSource jdbc/biblioteca se crea en GlassFish con asadmin (ver README). -->
+    <persistence-unit name="my_persistence_unit" transaction-type="JTA">
+        <jta-data-source>jdbc/biblioteca</jta-data-source>
+
+        <class>com.mycompany.biblioteca.Categoria</class>
+        <class>com.mycompany.biblioteca.Libro</class>
+        <class>com.mycompany.biblioteca.Usuario</class>
+        <class>com.mycompany.biblioteca.Prestamo</class>
+        <class>com.mycompany.biblioteca.Multa</class>
+
+        <!-- Todas las entidades están listadas arriba: no hace falta escanear el classpath -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <!-- EclipseLink no debe tocar el esquema: las tablas las crea setup/biblioteca.sql -->
+            <property name="eclipseLink.ddl-generation" value="none"/>
+            <property name="eclipseLink.logging.level" value="WARNING"/>
+            <!-- Sin caché compartida: cada lectura va a la base de datos,
+                 así los ejemplares disponibles nunca quedan desfasados. -->
+            <property name="eclipseLink.cache.shared.default" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>
