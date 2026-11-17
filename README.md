@@ -339,6 +339,3 @@ Definidas en los facades (`PrestamoFacade`, `LibroFacade`, `UsuarioFacade`,
 
 ---
 
-## 12. Pendientes
-
-Ver [TODO.md](TODO.md).
